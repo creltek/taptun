@@ -1,7 +1,7 @@
 package taptun
 
 import (
-	"errors"
+	"fmt"
 	"golang.org/x/sys/unix"
 	"os"
 	"syscall"
@@ -39,7 +39,7 @@ func createInterface(flags uint16, name string) (string, *os.File, error) {
 		return "", nil, err
 	}
 
-	fd := os.NewFile(uintptr(nfd), tunDevice)
+	fd := os.NewFile(uintptr(nfd), "/dev/net/tun")
 
 	return string(ifr[:unix.IFNAMSIZ]), fd, nil
 }
