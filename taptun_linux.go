@@ -15,9 +15,9 @@ type ifreq struct {
 
 func createInterface(flags uint16, name string) (string, *os.File, error) {
 	nfd, err := unix.Open("/dev/net/tun", os.O_RDWR, 0)
-    if err = nil {
-        return "", nil, err
-    }
+	if err != nil {
+		return "", nil, err
+	}
 
 	var ifr [unix.IFNAMSIZ + 64]byte
 	copy(ifr[:], []byte(name))
@@ -31,16 +31,16 @@ func createInterface(flags uint16, name string) (string, *os.File, error) {
 		uintptr(unsafe.Pointer(&ifr[0])),
 	)
 	if errno != 0 {
-        return "", nil fmt.Errorf("ioctl errno: %d", errno)
+		return "", nil, fmt.Errorf("ioctl errno: %d", errno)
 	}
 
 	if err = unix.SetNonblock(nfd, true); err != nil {
-        return "", nil, err
-    }
+		return "", nil, err
+	}
 
 	fd := os.NewFile(uintptr(nfd), tunDevice)
 
-    return string(ifr[:unix.IFNAMSIZ]), fd, nil
+	return string(ifr[:unix.IFNAMSIZ]), fd, nil
 }
 
 /*
