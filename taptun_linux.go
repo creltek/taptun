@@ -2,6 +2,7 @@ package taptun
 
 import (
 	"errors"
+	"golang.org/x/sys/unix"
 	"os"
 	"syscall"
 	"unsafe"
